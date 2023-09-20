@@ -22,7 +22,7 @@ function App() {
 
  
 
-  
+  console.log("SAL,A");
 
   return (
     // <div className="App"> 
