@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
+import { useEffect } from 'react';
 import './WeatherApp.css'
 
 import search_icon from '../Assets/search.png'
@@ -11,20 +12,22 @@ import wind_icon from '../Assets/wind.png'
 import humidity_icon from '../Assets/humidity.png'
 const WeatherApp = () => {
     const [wicon, setWicon] = useState(cloud_icon);
+    const [inputValue, setInputValue] = useState('');
     
 
-    const search = async ()=>{
-        console.log('==>>   chal gaya' )
+    const search = async (e)=>{
+        console.log(e)
+        
         const element = document.getElementsByClassName("cityInput")
         console.log(element[0].value)
-        if(element[0].value === ""){
-            return 0;
-        }
-        let url = `https://api.openweathermap.org/data/2.5/weather?q=${element[0].value}&appid=52008e0807c7194ee1f1d0750bf3f0d0&units=metric`;
-
+        let dataCopy ;
+        
+        try {
+          let url = `https://api.openweathermap.org/data/2.5/weather?q=${inputValue || e }&appid=52008e0807c7194ee1f1d0750bf3f0d0&units=metric`;
         let response = await fetch(url);
         let data = await response.json();
-        console.log(data);
+        dataCopy =data
+        
         const humidity = document.getElementsByClassName("humidity-percent");
         const wind = document.getElementsByClassName("wind-rate")
         const temprature = document.getElementsByClassName("weather-temp")
@@ -36,6 +39,7 @@ const WeatherApp = () => {
         wind[0].innerHTML = data.wind.speed+ " km/h";
         temprature[0].innerHTML = Math.floor(data.main.temp) + "&#x2103"  ;
         location[0].innerHTML = data.name;
+        
         if(data.weather[0].icon === '01d'|| data.weather[0].icon === '01n' ){
             setWicon(clear_icon)
         }
@@ -59,40 +63,55 @@ const WeatherApp = () => {
         }
         else{
             setWicon(clear_icon)
+            
         }
+          
+        } catch (error) {
+          console.log(dataCopy)
+          const location = document.getElementsByClassName("weather-location")
+          location[0].innerHTML = dataCopy.message;
+          
+        }
+        
 
 
     }
+
+    useEffect(() => {
+      search("karachi")
+  }, [inputValue]);
+// di
+  function inputChangeHandler(val) {
+    setInputValue(val.target.value)
+}
+
   return (
     <div className='container'>
       <div className="top-bar">
-        <input type="text" className="cityInput" />
-        <div className="search-icon" onClick={()=>{search()}}>
-            <img src={search_icon} alt="" />
-        </div>
+        <input type="text" className="cityInput" value={inputValue} onChange={inputChangeHandler} />
       </div>
       <div className="weather-image">
         <img src={wicon} alt="" />
       </div>
-      <div className='descrip'>rain</div>
+      <div className='descrip'></div>
       <div className="weather-temp">
-        24 ;
+    
       </div>
       <div className="weather-location">
-        London
+        
       </div>
       <div className="data-container">
         <div className="element">
             <img src={humidity_icon} alt="" className='icon' />
             <div className="data">
-                <div className="humidity-percent">64%</div>
+                <div className="humidity-percent"></div>
                 <div className="text">Humidity</div>
             </div>
         </div>
         <div className="element">
             <img src={wind_icon} alt="" className='icon' />
             <div className="data">
-                <div className="wind-rate">18 km/h</div>
+                <div className="wind-rate"></div>
                 <div className="text">Wind Speed</div>
             </div>
         </div>
