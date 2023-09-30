@@ -102,6 +102,9 @@
     font-weight: 400;
 
 }
+.weather-image{
+    margin: auto;
+}
 
 @media only screen and (max-width: 500px) {
     .container{
@@ -153,8 +156,7 @@ margin-top: 10px;
     }
     .weather-image{
         height: 150px;
-        display: flex;
-        justify-content: center;
+        
         
     }
     
