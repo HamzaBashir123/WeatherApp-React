@@ -2,6 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgba(190, 185, 185, 0.87);
 }
 .container{
     width: 607px;
